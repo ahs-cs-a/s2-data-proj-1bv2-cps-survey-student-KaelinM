@@ -1,3 +1,8 @@
+
+Kaelin Morris <kaelinmm26@ausdk12.org>
+Fri, May 2, 10:01 AM (4 days ago)
+to me, Aryan
+
 import java.util.Scanner;
 import java.io.File;
 
@@ -5,7 +10,7 @@ import java.io.File;
 public class ReadData{
     //I hard-coded the number of rows and columns so 
     //I could use a 2D array
-    private double[][] data = new double[...][...];
+    private double[][] data = new double[21908][14];
 
     //This should read in the csv file and store the data in a 2D array,
     //data -- don't forget to skip the header line and parse everything
@@ -18,7 +23,8 @@ public class ReadData{
             while(scanner.hasNextLine()){
                 String line = scanner.nextLine();
                 String[] lineArr = line.split(",");
-                ...
+                for(int i = 0; i < lineArr.length; i++)
+                    data[row][i] = Double.parseDouble(lineArr[i]);
                 row++;
             }
             scanner.close();
@@ -35,8 +41,11 @@ public class ReadData{
     //this should return a double array of the column
     //of data
     public double[][] getColumns(int col1, int col2){
-        double[][] columns = ...
-        ...
+        double[][] columns = new double[data.length][2];
+        for(int i = 0; i < data[0].length; i++){
+            columns[0][i] = data[i][col1];
+            columns[1][i] = data[i][col2];
+        }
         return columns;
     }
 
@@ -52,28 +61,45 @@ public class ReadData{
     //for the x column and y column
     public double[] stdDeviation(double[][] xy){
         double sum = 0;
-        double[] mean = ...
-        ...
-        return .. //sample variance!
+        double[] mean = mean(xy);
+        double[] std = new double[2];
+        double var;
+        for(int j = 0; j < xy.length; j++){
+            for(int i = 0; i < xy[j].length; i++)
+                var += Math.pow(2, xy[j][i] - mean[j])
+            std[j] = Math.sqrt(var)/(xy[0].length - 1);
+        }
+        
+        return std; //sample variance!
     }
-    
     //this returns the mean of each columns of data passed in
     //the mean is the sum of the values divided by the number 
     //of values
+    
     public double[] mean(double[][] xy){
         double sum = 0;
-        ...
-        return ...;
+        double[] avg = new double[2];
+        for(double d: xy[0])
+            sum += d;
+        avg[0] = sum/(xy[0].length);
+        sum = 0;
+        for(double d: xy[1])
+            sum += d;
+        avg[1] = sum/(xy[1].length);
+        return avg;
     }
 
     //this returns the values of each column in standard units
     //the standard units are the value minus the mean divided by the standard deviation
     //this should return a double 2D array of the standard units
     public double[][] standardUnits(double[][] xy){
-        double[][] stdArr = ...
-        double[] stdDeviation = ...;
-        double[] mean = ...;
-        ...
+        double[][] stdArr = new double[2][xy[0].length];
+        double[] stdDeviation = stdDeviation(xy);
+        double[] mean = mean(xy);
+        for(int j = 0; j < xy.length; j++){
+            for(int i = 0; i < xy[0].length; i++)
+                stdArr[j][i] = (xy[j][i] - mean[j]) / std[j];
+        }
         return stdArr;
     }
     
@@ -86,7 +112,8 @@ public class ReadData{
     //the correlation is between -1 and 1
     public double correlation(double[][] xy){
         double sum = 0;
-        ...
+        double[][] x = standardUnits(xy);
+        for(int i = 0; i < xy[0].length; i ++)
         return ...;    
     }
     
